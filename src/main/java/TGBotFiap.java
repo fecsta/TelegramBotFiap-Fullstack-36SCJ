@@ -3,16 +3,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 
 public class TGBotFiap extends TelegramLongPollingBot {
 
@@ -23,6 +13,7 @@ public class TGBotFiap extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update){
 
         ci.setChatId(update.getMessage().getChatId());
+        
         //Pega a mensagem inicial
         SendMessage message = new SendMessage()
                 .setChatId(update.getMessage().getChatId())
@@ -61,8 +52,11 @@ public class TGBotFiap extends TelegramLongPollingBot {
                      }
                      return;
                  }
-                Map<String,String> mapaCep = ci.buscarCep(message.getText());
-                if(mapaCep.size() <= 0) {
+                 
+                Endereco endereco = Utils.buscaEnderecoPorCEP(message.getText());
+                
+                
+                if(endereco == null) {
                     message.setText("O cep digitado não é valido, digite novamente");
                     try {
                         execute(message);
@@ -70,17 +64,26 @@ public class TGBotFiap extends TelegramLongPollingBot {
                         e.printStackTrace();
                     }
                 }else{
-                    message.setText("Endereço:" + mapaCep.get("logradouro") +
-                            "\nBairro: " + mapaCep.get("bairro") +
-                            "\nCidade: " + mapaCep.get("localidade") +
-                            "\nEstado: " + mapaCep.get("uf"));
+                	
+                	StringBuilder enderecoString = new StringBuilder();
+                	enderecoString.append("Endereço: ").append(endereco.getLogradouro());
+                	enderecoString.append("\nBairro: ").append(endereco.getBairro());
+                	enderecoString.append("\nCidade: ").append(endereco.getLocalidade());
+                	enderecoString.append("\nEstado: ").append(endereco.getUf());
+                	
+                    message.setText(enderecoString.toString());
+                    
                     ci.setState("MenuIni");
+                    
                     try {
                         execute(message);
                     } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
                 }
+                
+                
+                
             }else{
                 message.setText("Digite o CEP a ser  consultado com 8 digitos");
                 ci.setState("ConsultarCEP");
@@ -117,16 +120,15 @@ public class TGBotFiap extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
-
     }
 
     @Override
     public String getBotUsername() {
-        return "TeleFiapBot";
+        return "BotGuerraFiap";
     }
 
     @Override
     public String getBotToken() {
-        return "1047254319:AAGuwKitDMCg4XyX7BsA3DhokLeAv3UqYrM";
+        return "1093442418:AAGJM0TSkM9nFV5TdsMCBwJqWTXj7KnmM-4";
     }
 }
