@@ -36,7 +36,6 @@ public class TGBotFiap extends TelegramLongPollingBot {
             try {
                 execute(message);
                 ci.setState("Menu");
-                System.out.println(ci.getState());
 
             } catch (TelegramApiException e) {
                 e.printStackTrace();
@@ -52,22 +51,38 @@ public class TGBotFiap extends TelegramLongPollingBot {
         }else if (ci.getState().equals("ConsultarCEP")||(message.getText().equalsIgnoreCase("cep"))) {
 
              if(ci.getState().equals("ConsultarCEP")){
+                 //Valida se foi digitado um cep antes de executar o serviço
+                 if (message.getText().length() < 8 || message.getText().length() > 8 ){
+                     message.setText("Não foi digitado um CEP, por favor, digite um cep corretamente");
+                     try {
+                         execute(message);
+                     } catch (TelegramApiException e) {
+                         e.printStackTrace();
+                     }
+                     return;
+                 }
                 Map<String,String> mapaCep = ci.buscarCep(message.getText());
-                 System.out.println(mapaCep.get("logradouro"));
-                message.setText("Endereço:" + mapaCep.get("logradouro") +
-                        "\nBairro: " + mapaCep.get("bairro") +
-                        "\nCidade: " + mapaCep.get("localidade") +
-                        "\nEstado: " + mapaCep.get("uf"));
-
-                try {
-                    execute(message);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
+                if(mapaCep.size() <= 0) {
+                    message.setText("O cep digitado não é valido, digite novamente");
+                    try {
+                        execute(message);
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    message.setText("Endereço:" + mapaCep.get("logradouro") +
+                            "\nBairro: " + mapaCep.get("bairro") +
+                            "\nCidade: " + mapaCep.get("localidade") +
+                            "\nEstado: " + mapaCep.get("uf"));
+                    ci.setState("MenuIni");
+                    try {
+                        execute(message);
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
                 }
-                ci.setState("MenuIni");
-
             }else{
-                message.setText("Digite o CEP a ser  consultado");
+                message.setText("Digite o CEP a ser  consultado com 8 digitos");
                 ci.setState("ConsultarCEP");
                 try {
                     execute(message);
@@ -95,7 +110,7 @@ public class TGBotFiap extends TelegramLongPollingBot {
 
         if (ci.getState().equals("MenuIni")){
             message.setText("Digite 'cep' para fazer uma busca de endereço por cep \nDigite 'finalizar' para encerrar o chat atual");
-
+            ci.setState("Menu");
             try {
                 execute(message);
             } catch (TelegramApiException e) {
