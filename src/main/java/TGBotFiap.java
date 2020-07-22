@@ -47,7 +47,7 @@ public class TGBotFiap extends TelegramLongPollingBot {
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
-        //Caso tenha digitado o 'cep', reconhecera o estado ConsultarCEP para realizar a consulta
+        //Caso tenha digitado o 'cep', será feito a solicitação do CEP e depois seta o estado ConsultarCEP para realizar a consulta
         }else if (ci.getState().equals("ConsultarCEP")||(message.getText().equalsIgnoreCase("cep"))) {
 
              if(ci.getState().equals("ConsultarCEP")){
