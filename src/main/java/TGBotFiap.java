@@ -21,15 +21,12 @@ public class TGBotFiap extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update){
-        System.out.println(ci.getState());
+
         ci.setChatId(update.getMessage().getChatId());
-        System.out.println(ci.getChatId());
-        SendMessage message = new SendMessage() // Create a SendMessage object with mandatory fields
+        //Pega a mensagem inicial
+        SendMessage message = new SendMessage()
                 .setChatId(update.getMessage().getChatId())
                 .setText(update.getMessage().getText());
-
-        System.out.println(message);
-        System.out.println(message.getText());
 
         //Se o  estado do objetivo estiver null, identifica como primeira interação
         if (update.hasMessage() && update.getMessage().hasText()&& ci.getState() == null) {
