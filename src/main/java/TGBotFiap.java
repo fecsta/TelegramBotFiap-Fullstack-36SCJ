@@ -110,7 +110,7 @@ public class TGBotFiap extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
-
+        //Caso tenha saido de uma interação, repete o Menu para o usuário
         if (ci.getState().equals("MenuIni")){
             message.setText("Digite 'cep' para fazer uma busca de endereço por cep \nDigite 'finalizar' para encerrar o chat atual");
             ci.setState("Menu");
