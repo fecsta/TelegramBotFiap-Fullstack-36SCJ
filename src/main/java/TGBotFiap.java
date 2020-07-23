@@ -3,117 +3,132 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+
 public class TGBotFiap extends TelegramLongPollingBot {
 
-	ChatInteracao ci = new ChatInteracao();
+    ChatInteracao ci = new ChatInteracao();
 
-	@Override
-	public void onUpdateReceived(Update update) {
 
-		ci.setChatId(update.getMessage().getChatId());
+    @Override
+    public void onUpdateReceived(Update update){
 
-		// Pega a mensagem inicial
-		SendMessage message = new SendMessage()
-				.setChatId(update.getMessage().getChatId())
-				.setText(update.getMessage().getText());
+        ci.setChatId(update.getMessage().getChatId());
+        
+        //Pega a mensagem inicial
+        SendMessage message = new SendMessage()
+                .setChatId(update.getMessage().getChatId())
+                .setText(update.getMessage().getText());
 
-		// Se o estado do objetivo estiver null, identifica como primeira interação
-		if (update.hasMessage() && update.getMessage().hasText() && ci.getState() == null) {
+        //Se o  estado do objetivo estiver null, identifica como primeira interação
+        if (update.hasMessage() && update.getMessage().hasText()&& ci.getState() == null) {
 
-			ci.setState("Menu");
-			
-			message.setText("Bem vindo ao TelegramBot Fiap - Curso FullStack");
-			enviaMensagemExecucao(message);
-			
-			StringBuilder mensagemOpcoes = new StringBuilder();
-			mensagemOpcoes.append("Digite o opção desejada");
-			mensagemOpcoes.append("\n1 - Consulta CEP");
-			mensagemOpcoes.append("\n2 - Valida CPF");
-			mensagemOpcoes.append("\n3 - Consulta clima");
-			mensagemOpcoes.append("\n4 - Consulta trânsito");
-			
-			message.setText(mensagemOpcoes.toString());
-			enviaMensagemExecucao(message);
-		}
+            message.setText("Bem vindo ao TelegramBot Fiap - Curso FullStack");
 
-		// Caso tenha digitado o 'cep', será feito a solicitação do CEP e depois seta o
-		// estado ConsultarCEP para realizar a consulta
-		else if (ci.getState().equals("ConsultarCEP") || (message.getText().equalsIgnoreCase("cep"))) {
+            try {
+                execute(message);
+                ci.setState("Menu");
 
-			if (ci.getState().equals("ConsultarCEP")) {
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+            message.setText("Digite 'cep' para fazer uma busca de endereço por cep \nDigite 'finalizar' para encerrar o chat atual");
 
-				Endereco endereco = Utils.buscaEnderecoPorCEP(message.getText());
-				
-				// Valida se foi digitado um cep antes de executar o serviço
-				if (!Utils.validaCEP(message.getText()) || endereco == null) {
-					message.setText("CEP informado incorreto, por favor digite o CEP corretamente");
-					enviaMensagemExecucao(message);
-					return;
-				}
+            try {
+                execute(message);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        //Caso tenha digitado o 'cep', será feito a solicitação do CEP e depois seta o estado ConsultarCEP para realizar a consulta
+        }else if (ci.getState().equals("ConsultarCEP")||(message.getText().equalsIgnoreCase("cep"))) {
 
-				ci.setState("MenuIni");
+             if(ci.getState().equals("ConsultarCEP")){
+                 //Valida se foi digitado um cep antes de executar o serviço
+                 if (message.getText().length() < 8 || message.getText().length() > 8 ){
+                     message.setText("Não foi digitado um CEP, por favor, digite um cep corretamente");
+                     try {
+                         execute(message);
+                     } catch (TelegramApiException e) {
+                         e.printStackTrace();
+                     }
+                     return;
+                 }
+                 
+                Endereco endereco = Utils.buscaEnderecoPorCEP(message.getText());
+                
+                
+                if(endereco == null) {
+                    message.setText("O cep digitado não é valido, digite novamente");
+                    try {
+                        execute(message);
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                	
+                	StringBuilder enderecoString = new StringBuilder();
+                	enderecoString.append("Endereço: ").append(endereco.getLogradouro());
+                	enderecoString.append("\nBairro: ").append(endereco.getBairro());
+                	enderecoString.append("\nCidade: ").append(endereco.getLocalidade());
+                	enderecoString.append("\nEstado: ").append(endereco.getUf());
+                	
+                    message.setText(enderecoString.toString());
+                    
+                    ci.setState("MenuIni");
+                    
+                    try {
+                        execute(message);
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                }
+                
+                
+                
+            }else{
+                message.setText("Digite o CEP a ser  consultado com 8 digitos");
+                ci.setState("ConsultarCEP");
+                try {
+                    execute(message);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }
+        //Encerra o chat setando o estado como null
+        }else if (message.getText().equalsIgnoreCase("finalizar")) {
+            ci.setState(null);
+            message.setText("Até Logo");
+            try {
+                execute(message);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }else{
+            message.setText("Não entendi\nDigite a opção anterior ou digite 'finalizar' para encerrar");
+            try {
+                execute(message);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        //Caso tenha saido de uma interação, repete o Menu para o usuário
+        if (ci.getState().equals("MenuIni")){
+            message.setText("Digite 'cep' para fazer uma busca de endereço por cep \nDigite 'finalizar' para encerrar o chat atual");
+            ci.setState("Menu");
+            try {
+                execute(message);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-				message.setText(endereco.getEnderecoFormatado());
-				enviaMensagemExecucao(message);
+    @Override
+    public String getBotUsername() {
+        return "TeleFiapBot";
+    }
 
-			} else {
-				ci.setState("ConsultarCEP");
-
-				message.setText("Digite o CEP a ser  consultado com 8 digitos");
-				enviaMensagemExecucao(message);
-			}
-
-		}
-
-		else if (ci.getState().equals("ConsultarCPF") || (message.getText().equalsIgnoreCase("cpf"))) {
-			ci.setState("ConsultarCPF");
-			
-			if(!Utils.validaCPF(message.getText())) 
-				message.setText("O CPF digitado está incorreto");
-				enviaMensagemExecucao(message);
-				
-		}
-
-		// Encerra o chat setando o estado como null
-		else if (message.getText().equalsIgnoreCase("finalizar")) {
-			ci.setState(null);
-			
-			message.setText("Até Logo");
-			enviaMensagemExecucao(message);
-		} 
-		else {
-
-			message.setText("Não entendi\nDigite a opção anterior ou digite 'finalizar' para encerrar");
-			enviaMensagemExecucao(message);
-		}
-
-		if (ci.getState().equals("MenuIni")) {
-			ci.setState("Menu");
-			
-			message.setText("Digite 'cep' para fazer uma busca de endereço por cep \nDigite 'finalizar' para encerrar o chat atual");
-			enviaMensagemExecucao(message);
-		}
-	}
-	
-	/**
-	 * Metodo que recebe uma {@link SendMessage} e envia
-	 * @param message
-	 */
-	private void enviaMensagemExecucao(SendMessage message) {
-		try {
-			execute(message);
-		} catch (TelegramApiException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public String getBotUsername() {
-		return "BotGuerraFiap";
-	}
-
-	@Override
-	public String getBotToken() {
-		return "1093442418:AAGJM0TSkM9nFV5TdsMCBwJqWTXj7KnmM-4";
-	}
+    @Override
+    public String getBotToken() {
+        return "1047254319:AAGuwKitDMCg4XyX7BsA3DhokLeAv3UqYrM";
+    }
 }
