@@ -118,12 +118,12 @@ public class TGBotFiap extends TelegramLongPollingBot {
                    
                    StringBuilder tempoString = new StringBuilder();
                    tempoString.append("A previsão do tempo para: ").append(tempo.getName());
-                   tempoString.append("\nTemperatura: ").append(tempo.getTemperatura());
-                   tempoString.append("\nSensação Térmica: ").append(tempo.getSensacaoTermica());
-                   tempoString.append("\nMáxima: ").append(tempo.getTempMaxima());
-                   tempoString.append("\nMínima: ").append(tempo.getTempMinima());
-                   tempoString.append("\nUmidade do Ar: ").append(tempo.getHumidity());
-                   tempoString.append("\nVelocidade do Vento: ").append(tempo.getWind());
+                   tempoString.append("\nTemperatura: ").append(tempo.getTemperatura() +" °C");
+                   tempoString.append("\nSensação Térmica: ").append(tempo.getSensacaoTermica() +" °C");
+                   tempoString.append("\nMáxima: ").append(tempo.getTempMaxima() +" °C");
+                   tempoString.append("\nMínima: ").append(tempo.getTempMinima() +" °C");
+                   tempoString.append("\nUmidade do Ar: ").append(tempo.getHumidity() +" %");
+                   tempoString.append("\nVelocidade do Vento: ").append(tempo.getWind() +" km/h");
                    
                    message.setText(tempoString.toString());
                    
@@ -175,11 +175,11 @@ public class TGBotFiap extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "jvptfiap_bpt";
+        return "TeleFiapBot";
     }
 
     @Override
     public String getBotToken() {
-        return "1354461424:AAH_HWp4dAws73CEQvBEPu5RTM8Kw7eItKA";
+        return "1047254319:AAGuwKitDMCg4XyX7BsA3DhokLeAv3UqYrM";
     }
 }

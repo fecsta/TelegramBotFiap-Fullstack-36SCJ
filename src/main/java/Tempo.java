@@ -26,7 +26,7 @@ public class Tempo {
     return temp_min;
   }
 
-  public Object getSensacaoTermica() {
+  public String getSensacaoTermica() {
     return feels_like;
   }
 

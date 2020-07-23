@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Map;
 
 import com.google.gson.GsonBuilder;
 
@@ -69,8 +70,7 @@ public class Utils {
 			brd.close();
 
 			System.out.println(jsonSt);
-		
-			
+
 			return new GsonBuilder().create().fromJson(jsonSt.toString(), Tempo.class);
 			
 		} catch (Exception e) {
