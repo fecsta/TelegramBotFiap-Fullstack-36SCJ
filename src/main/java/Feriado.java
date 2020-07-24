@@ -20,6 +20,7 @@ public class Feriado {
 	public String toString() {
 		return "Feriado [Holiday=" + Holiday + "]";
 	}
+
 }
 
 class Holiday {

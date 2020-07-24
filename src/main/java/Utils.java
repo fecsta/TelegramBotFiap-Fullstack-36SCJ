@@ -110,17 +110,6 @@ public class Utils {
 		
 		return true;
 	}
-	
-	
-	public static void main(String[] args) {
-		
-		Feriado buscaFeriadosPorAno = buscaFeriadosPorAno(2020);
-		Endereco buscaEnderecoPorCEP = buscaEnderecoPorCEP("04842050");
-		
-		System.out.println(buscaFeriadosPorAno);
-		System.out.println(buscaEnderecoPorCEP);
-		
-	}
 }
 
 
