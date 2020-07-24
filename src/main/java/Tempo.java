@@ -1,49 +1,204 @@
+import java.util.List;
+
 /**
- * Classe que auxilia na desserialização de um json ao buscar pela previsão do tempo de determinada cidade
+ * Classe que auxilia na desserialização de um json ao buscar pela previsão do
+ * tempo de determinada cidade
  */
 
-public class Tempo {
-  
-  private String temp;
-  private String temp_max;
-  private String temp_min;
-  private String feels_like;
-  private String humidity;
-  private String speed;
-  private String name;
+class Tempo{
+	
+	private Coord coord;
+	private List<Weather> weather;
+	private String base;
+	private MainT main;
+	private Long visibility;
+	private Wind wind;
+	private Clouds clouds;
+	private Long dt;
+	private Sys sys;
+	private Long timezone;
+	private Integer id;
+	private String name;
+	private Integer cod;
+	
+	public Tempo() {
+	}
 
-  public Tempo(){}
+	public Coord getCoord() {
+		return coord;
+	}
 
-  public String getTemperatura() {
-    return temp;
-  }
+	public List<Weather> getWeather() {
+		return weather;
+	}
 
-  public String getTempMaxima() {
-    return temp_max;
-  }
+	public String getBase() {
+		return base;
+	}
 
-  public String getTempMinima() {
-    return temp_min;
-  }
+	public MainT getMain() {
+		return main;
+	}
 
-  public String getSensacaoTermica() {
-    return feels_like;
-  }
+	public Long getVisibility() {
+		return visibility;
+	}
 
-  public String getHumidity() {
-    return humidity;
-  }
+	public Wind getWind() {
+		return wind;
+	}
 
-  public String getWind(){
-    return speed;
-  }
+	public Clouds getClouds() {
+		return clouds;
+	}
 
-  public String getName(){
-    return name;
-  }
+	public Long getDt() {
+		return dt;
+	}
 
+	public Sys getSys() {
+		return sys;
+	}
+
+	public Long getTimezone() {
+		return timezone;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public Integer getCod() {
+		return cod;
+	}
+	
   @Override
   public String toString() {
-    return "Previsão do tempo para: " + name + "[ Temperatura = " + temp + " °C , Sensação Térmica = " + feels_like + " °C , Máxima = " + temp_max + " °C , Mínima = " + temp_min + " °C , Umidade do Ar = " + humidity + " % , Velocidade do Vento = " + speed + " km/h ]";
-  }
+    return "Previsão do tempo para: " + name + main + wind;
+  }  
 }
+class Coord{
+	private Double lon;
+	private Double lat;
+	public Coord() {
+	}
+	public Double getLon() {
+		return lon;
+	}
+	public Double getLat() {
+		return lat;
+	}
+}
+class Weather{
+	private Integer id;
+	private String main;
+	private String description;
+	private String icon;
+	public Weather() {
+	}
+	public Integer getId() {
+		return id;
+	}
+	public String getMain() {
+		return main;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public String getIcon() {
+		return icon;
+	}
+  
+ 
+	
+	
+}
+
+class MainT{
+	private  Double temp;
+	private  Double feels_like;
+	private  Double temp_min;
+	private  Double temp_max;
+	private Integer pressure;
+	private  Integer humidity;
+	public MainT() {
+	}
+	public Double getTemp() {
+		return  temp;
+	}
+	public  Double getFeels_like() {
+		return feels_like;
+	}
+	public  Double getTemp_min() {
+		return temp_min;
+	}
+	public  Double getTemp_max() {
+		return temp_max;
+	}
+	public Integer getPressure() {
+		return pressure;
+	}
+	public  Integer getHumidity() {
+		return humidity;
+  }
+	
+	@Override
+  public String toString() {
+    return  "Temperatura = " + temp + " °C , Sensação Térmica = " + feels_like + " °C , Máxima = " + temp_max + " °C , Mínima = " + temp_min + " °C , Umidade do Ar = " + humidity + " % ";
+  }
+ 
+}
+class Wind{
+	private  Double speed;
+	private Integer deg;
+	public Wind() {
+	}
+	public  Double getSpeed() {
+		return speed;
+	}
+	public Integer getDeg() {
+		return deg;
+	}
+	
+	@Override
+  public String toString() {
+    return  speed + " km/h";
+	}
+	
+}
+class Clouds{
+	private Integer all;
+	public Clouds() {
+	}
+	public Integer getAll() {
+		return all;
+	}
+}
+class Sys{
+	private Integer type;
+	private Integer id;
+	private String country;
+	private Long sunrise;
+	private Long sunset;
+	public Sys() {
+	}
+	public Integer getType() {
+		return type;
+	}
+	public Integer getId() {
+		return id;
+	}
+	public String getCountry() {
+		return country;
+	}
+	public Long getSunrise() {
+		return sunrise;
+	}
+	public Long getSunset() {
+		return sunset;
+	}	
+} 

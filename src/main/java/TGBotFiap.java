@@ -118,12 +118,13 @@ public class TGBotFiap extends TelegramLongPollingBot {
                    
                    StringBuilder tempoString = new StringBuilder();
                    tempoString.append("A previsão do tempo para: ").append(tempo.getName());
-                   tempoString.append("\nTemperatura: ").append(tempo.getTemperatura() +" °C");
-                   tempoString.append("\nSensação Térmica: ").append(tempo.getSensacaoTermica() +" °C");
-                   tempoString.append("\nMáxima: ").append(tempo.getTempMaxima() +" °C");
-                   tempoString.append("\nMínima: ").append(tempo.getTempMinima() +" °C");
-                   tempoString.append("\nUmidade do Ar: ").append(tempo.getHumidity() +" %");
-                   tempoString.append("\nVelocidade do Vento: ").append(tempo.getWind() +" km/h");
+                   tempo.getMain();
+                   tempoString.append("\nTemperatura: ").append(tempo.getMain().getTemp() + " °C");
+                   tempoString.append("\nSensação Térmica: ").append(tempo.getMain().getFeels_like() +" °C");
+                   tempoString.append("\nMáxima: ").append(tempo.getMain().getTemp_max() +" °C");
+                   tempoString.append("\nMínima: ").append(tempo.getMain().getTemp_min() +" °C");
+                   tempoString.append("\nUmidade do Ar: ").append(tempo.getMain().getHumidity()+" %");
+                   tempoString.append("\nVelocidade do Vento: ").append(tempo.getWind());
                    
                    message.setText(tempoString.toString());
                    

@@ -3,7 +3,11 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 /**
- * @author Desenvolvido pelos alunos da turma 36SCJ - MBA FIAP
+ * @author Douglas Gonçalves
+ * @author Leonardo Kojima
+ * @author Diego Guerra
+ * @author Aldo Marini
+ * @author Felipe C Araujo
  * @version 1.0
  */
 public class Main {
