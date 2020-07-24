@@ -10,8 +10,8 @@ import org.json.XML;
 
 import com.google.gson.GsonBuilder;
 
-// import br.com.caelum.stella.ValidationMessage;
-// import br.com.caelum.stella.validation.CPFValidator;
+import br.com.caelum.stella.ValidationMessage;
+import br.com.caelum.stella.validation.CPFValidator;
 
 
 /**
@@ -129,16 +129,16 @@ public class Utils {
 	 * @param cpf
 	 * @return true valido, false invalido
 	 */
-	// public static boolean validaCPF(String cpf) {
+	public static boolean validaCPF(String cpf) {
 		
-	// 	CPFValidator cpfValidator = new CPFValidator(); 
-	// 	List<ValidationMessage> erros = cpfValidator.invalidMessagesFor(cpf); 
+		CPFValidator cpfValidator = new CPFValidator(); 
+		List<ValidationMessage> erros = cpfValidator.invalidMessagesFor(cpf); 
 		
-	// 	if(erros.size() > 0) 
-	// 		return false;
+		if(erros.size() > 0) 
+			return false;
 		
-	// 	return true;
-	// }
+		return true;
+	}
 
 	public static void main(String[] args) throws IOException{
     
