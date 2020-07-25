@@ -105,7 +105,9 @@ public class TGBotFiap extends TelegramLongPollingBot {
                 }
             }
 
-            //Caso tenha digitado 'imc', será feito a solicitação da altura e do peso para depois setado o estado PrevisaoTempo para realizar a consulta
+            //Caso tenha digitado 'imc', será feito a solicitação da altura para depois setar o estado Altura
+            //No estado Altura, valido o input do usuário para depois solicitar o peso e setar o estado Peso
+            //No estado Peso, valido o input do usuário e calculo o IMC
         }else if (ci.getState().equals("Peso") || ci.getState().equals("Altura") || (message.getText().equalsIgnoreCase("imc"))) {
 
             if (ci.getState().equals("Peso")) {
