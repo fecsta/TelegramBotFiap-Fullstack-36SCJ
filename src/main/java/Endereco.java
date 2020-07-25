@@ -61,12 +61,12 @@ public class Endereco {
 	
 	public String getEnderecoFormatado() {
 		
-		StringBuilder enderecoFormatado = new StringBuilder();
-		enderecoFormatado.append("Endereço: ").append(this.getLogradouro());
-		enderecoFormatado.append("\nBairro: ").append(this.getBairro());
-		enderecoFormatado.append("\nCidade: ").append(this.getLocalidade());
-		enderecoFormatado.append("\nEstado: ").append(this.getUf());
+		StringBuilder endereco = new StringBuilder();
+		endereco.append("Endereço: ").append(this.getLogradouro());
+		endereco.append("\nBairro: ").append(this.getBairro());
+		endereco.append("\nCidade: ").append(this.getLocalidade());
+		endereco.append("\nEstado: ").append(this.getUf());
 		
-		return enderecoFormatado.toString();
+		return endereco.toString();
 	}
 }
