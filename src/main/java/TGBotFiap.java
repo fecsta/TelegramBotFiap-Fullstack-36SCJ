@@ -7,7 +7,11 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public class TGBotFiap extends TelegramLongPollingBot {
 
     ChatInteracao ci = new ChatInteracao();
-
+    String comandos = "Digite 'cep' para fazer uma busca de endereço por cep\n"
+                    + "Digite 'imc' para calcular o seu IMC\n"
+                    + "Digite 'previsão' para a previsão do tempo\n"
+                    + "Digite 'finalizar' a qualquer momento para encerrar o chat atual";
+    IMC indice = new IMC();
 
     @Override
     public void onUpdateReceived(Update update){
@@ -23,7 +27,6 @@ public class TGBotFiap extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()&& ci.getState() == null) {
 
             message.setText("Bem vindo ao TelegramBot Fiap - MBA FullStack");
-
             try {
                 execute(message);
                 ci.setState("Menu");
@@ -31,14 +34,26 @@ public class TGBotFiap extends TelegramLongPollingBot {
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
-            message.setText("Digite 'cep' para fazer uma busca de endereço por cep \nDigite 'previsão' para a previsão do tempo\nDigite 'finalizar' para encerrar o chat atual");
 
+            message.setText(comandos);
             try {
                 execute(message);
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
-            //Caso tenha digitado o 'cep', será feito a solicitação do CEP e depois seta o estado ConsultarCEP para realizar a consulta
+
+            //Encerra o chat setando o estado como null
+        }else if (message.getText().equalsIgnoreCase("finalizar")) {
+
+            ci.setState(null);
+            message.setText("Até Logo");
+            try {
+                execute(message);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+
+            //Caso tenha digitado 'cep', será feito a solicitação do CEP e depois seta o estado ConsultarCEP para realizar a consulta
         }else if (ci.getState().equals("ConsultarCEP")||(message.getText().equalsIgnoreCase("cep"))) {
 
             if(ci.getState().equals("ConsultarCEP")){
@@ -54,7 +69,6 @@ public class TGBotFiap extends TelegramLongPollingBot {
                 }
 
                 Endereco endereco = Utils.buscaEnderecoPorCEP(message.getText());
-
 
                 if(endereco == null) {
                     message.setText("O cep digitado não é valido, digite novamente");
@@ -90,7 +104,90 @@ public class TGBotFiap extends TelegramLongPollingBot {
                     e.printStackTrace();
                 }
             }
-            //Caso tenha digitado o 'previsão', será feito a solicitação da previsão do tempo e depois setado o estado PrevisaoTempo para realizar a consulta
+
+            //Caso tenha digitado 'imc', será feito a solicitação da altura e do peso para depois setado o estado PrevisaoTempo para realizar a consulta
+        }else if (ci.getState().equals("Peso") || ci.getState().equals("Altura") || (message.getText().equalsIgnoreCase("imc"))) {
+
+            if (ci.getState().equals("Peso")) {
+                // Valida se peso é numérico
+                try {
+                    String text = message.getText().replace(",", ".");
+                    indice.setPeso(Float.parseFloat(text));
+                } catch (NumberFormatException exp) {
+                    message.setText("O valor de peso deve ser numérico, tente novamente");
+                    try {
+                        execute(message);
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                    return;
+                }
+
+                // Valida intervalo de peso
+                if (!indice.check("peso")) {
+                    message.setText(indice.error + "\nTente novamente");
+                    try {
+                        execute(message);
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    indice.calcIMC();
+                    message.setText("O seu IMC é de " + indice.imc + "\nVocê está " + indice.resultIMC());
+                    
+                    ci.setState("MenuIni");
+
+                    try {
+                        execute(message);
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else if (ci.getState().equals("Altura")) {
+                // Valida se altura é numérico
+                try {
+                    String text = message.getText().replace(",", ".");
+                    indice.setAltura(Float.parseFloat(text));
+                } catch (NumberFormatException exp) {
+                    message.setText("O valor de altura deve ser numérico, tente novamente");
+                    try {
+                        execute(message);
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                    return;
+                }
+
+                // Valida intervalo de altura
+                if (!indice.check("altura")) {
+                    message.setText(indice.error + "\nTente novamente");
+                    try {
+                        execute(message);
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    ci.setState("Peso");
+                    message.setText("Digite seu peso em kg");
+                    try {
+                        execute(message);
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            } else {
+                message.setText("Digite sua altura em metros");
+                ci.setState("Altura");
+                try {
+                    execute(message);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            //Caso tenha digitado 'previsão', será feito a solicitação da previsão do tempo e depois setado o estado PrevisaoTempo para realizar a consulta
         }else if (ci.getState().equals("PrevisaoTempo")||(message.getText().equalsIgnoreCase("previsão"))) {
 
             if(ci.getState().equals("PrevisaoTempo")){
@@ -145,15 +242,6 @@ public class TGBotFiap extends TelegramLongPollingBot {
                     e.printStackTrace();
                 }
             }
-            //Encerra o chat setando o estado como null
-        }else if (message.getText().equalsIgnoreCase("finalizar")) {
-            ci.setState(null);
-            message.setText("Até Logo");
-            try {
-                execute(message);
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
         }else{
             message.setText("Não entendi\nDigite uma opção válida ou digite 'finalizar' para encerrar");
             try {
@@ -164,7 +252,7 @@ public class TGBotFiap extends TelegramLongPollingBot {
         }
         //Caso tenha saido de uma interação, repete o Menu para o usuário
         if (ci.getState().equals("MenuIni")){
-            message.setText("Digite 'cep' para fazer uma busca de endereço por cep \nDigite 'previsão' para a previsão do tempo\nDigite 'finalizar' para encerrar o chat atual");
+            message.setText(comandos);
             ci.setState("Menu");
             try {
                 execute(message);
