@@ -134,7 +134,7 @@ public class TGBotFiap extends TelegramLongPollingBot {
                 }
                 else {
                     indice.calcIMC();
-                    message.setText("O seu IMC é de " + indice.imc + "\nVocê está " + indice.resultIMC());
+                    message.setText(indice.toString());
                     
                     ci.setState("MenuIni");
 
