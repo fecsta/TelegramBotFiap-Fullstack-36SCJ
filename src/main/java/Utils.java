@@ -94,9 +94,12 @@ public class Utils {
 	 * @param ano
 	 * @return
 	 */
-	public static Feriado buscaFeriadosPorAno(String ano) {
+	public static Feriado buscaFeriadosPorAno(String data) {
+		
+		if(data.length() == 10) 
+			data = data.split("/")[2];
 
-		String urlString = String.format("http://services.sapo.pt/Holiday/GetNationalHolidays?year=%s", ano);
+		String urlString = String.format("http://services.sapo.pt/Holiday/GetNationalHolidays?year=%s", data);
 
 		try {
 
