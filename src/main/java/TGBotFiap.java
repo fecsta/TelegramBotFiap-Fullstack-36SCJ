@@ -230,7 +230,6 @@ public class TGBotFiap extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return "1093442418:AAGJM0TSkM9nFV5TdsMCBwJqWTXj7KnmM-4";
+        return "1047254319:AAGuwKitDMCg4XyX7BsA3DhokLeAv3UqYrM";
     }
 }
-
