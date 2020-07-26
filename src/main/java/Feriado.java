@@ -34,11 +34,6 @@ public class Feriado {
 	public String toString() {
 		return "Feriado [Holiday=" + Holiday + "]";
 	}
-	
-	public Holiday buscaNoMapaPorData(String data) {
-		mapaDataFeriado = this.getHoliday().stream().collect(Collectors.toMap(h -> h.getDateFormatado(), h -> h));
-		return mapaDataFeriado.get(data);
-	}
 }
 
 class Holiday {
