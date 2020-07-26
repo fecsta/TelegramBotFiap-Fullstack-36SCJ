@@ -1,4 +1,3 @@
-import java.util.List;
 import java.util.Map;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -204,6 +203,8 @@ public class TGBotFiap extends TelegramLongPollingBot {
 				
 				message.setText(feriadosString.toString());
 				enviaMessage(message);
+				
+				ci.setState("MenuIni");
     		}
         		
         	else {
