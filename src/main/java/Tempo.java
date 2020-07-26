@@ -5,8 +5,8 @@ import java.util.List;
  * tempo de determinada cidade
  */
 
-class Tempo{
-	
+class Tempo {
+
 	private Coord coord;
 	private List<Weather> weather;
 	private String base;
@@ -20,7 +20,7 @@ class Tempo{
 	private Integer id;
 	private String name;
 	private Integer cod;
-	
+
 	public Tempo() {
 	}
 
@@ -75,126 +75,172 @@ class Tempo{
 	public Integer getCod() {
 		return cod;
 	}
+
+	@Override
+	public String toString() {
+		return "Previsão do tempo para: " + name + main + wind;
+	}
 	
-  @Override
-  public String toString() {
-    return "Previsão do tempo para: " + name + main + wind;
-  }  
+	public String getTempoFormatado() {
+		
+        StringBuilder tempo = new StringBuilder();
+        tempo.append("A previsão do tempo para: ").append(this.getName());
+        tempo.append("\nTemperatura: ").append(this.getMain().getTemp() + " °C");
+        tempo.append("\nSensação Térmica: ").append(this.getMain().getFeels_like() +" °C");
+        tempo.append("\nMáxima: ").append(this.getMain().getTemp_max() +" °C");
+        tempo.append("\nMínima: ").append(this.getMain().getTemp_min() +" °C");
+        tempo.append("\nUmidade do Ar: ").append(this.getMain().getHumidity()+" %");
+        tempo.append("\nVelocidade do Vento: ").append(this.getWind());
+        
+        return tempo.toString();
+	}
 }
-class Coord{
+
+class Coord {
 	private Double lon;
 	private Double lat;
+
 	public Coord() {
 	}
+
 	public Double getLon() {
 		return lon;
 	}
+
 	public Double getLat() {
 		return lat;
 	}
 }
-class Weather{
+
+class Weather {
 	private Integer id;
 	private String main;
 	private String description;
 	private String icon;
+
 	public Weather() {
 	}
+
 	public Integer getId() {
 		return id;
 	}
+
 	public String getMain() {
 		return main;
 	}
+
 	public String getDescription() {
 		return description;
 	}
+
 	public String getIcon() {
 		return icon;
-	}	
+	}
 }
 
-class MainT{
-	private  Double temp;
-	private  Double feels_like;
-	private  Double temp_min;
-	private  Double temp_max;
+class MainT {
+	private Double temp;
+	private Double feels_like;
+	private Double temp_min;
+	private Double temp_max;
 	private Integer pressure;
-	private  Integer humidity;
+	private Integer humidity;
+
 	public MainT() {
 	}
+
 	public Double getTemp() {
-		return  temp;
+		return temp;
 	}
-	public  Double getFeels_like() {
+
+	public Double getFeels_like() {
 		return feels_like;
 	}
-	public  Double getTemp_min() {
+
+	public Double getTemp_min() {
 		return temp_min;
 	}
-	public  Double getTemp_max() {
+
+	public Double getTemp_max() {
 		return temp_max;
 	}
+
 	public Integer getPressure() {
 		return pressure;
 	}
-	public  Integer getHumidity() {
+
+	public Integer getHumidity() {
 		return humidity;
-  }
-	
+	}
+
 	@Override
-  public String toString() {
-    return  "Temperatura = " + temp + " °C , Sensação Térmica = " + feels_like + " °C , Máxima = " + temp_max + " °C , Mínima = " + temp_min + " °C , Umidade do Ar = " + humidity + " % ";
-  }
- 
+	public String toString() {
+		return "Temperatura = " + temp + " °C , Sensação Térmica = " + feels_like + " °C , Máxima = " + temp_max
+				+ " °C , Mínima = " + temp_min + " °C , Umidade do Ar = " + humidity + " % ";
+	}
+
 }
-class Wind{
-	private  Double speed;
+
+class Wind {
+	private Double speed;
 	private Integer deg;
+
 	public Wind() {
 	}
-	public  Double getSpeed() {
+
+	public Double getSpeed() {
 		return speed;
 	}
+
 	public Integer getDeg() {
 		return deg;
 	}
-	
+
 	@Override
-  public String toString() {
-    return  speed + " km/h";
+	public String toString() {
+		return speed + " km/h";
 	}
-	
+
 }
-class Clouds{
+
+class Clouds {
 	private Integer all;
+
 	public Clouds() {
 	}
+
 	public Integer getAll() {
 		return all;
 	}
 }
-class Sys{
+
+class Sys {
 	private Integer type;
 	private Integer id;
 	private String country;
 	private Long sunrise;
 	private Long sunset;
+
 	public Sys() {
 	}
+
 	public Integer getType() {
 		return type;
 	}
+
 	public Integer getId() {
 		return id;
 	}
+
 	public String getCountry() {
 		return country;
 	}
+
 	public Long getSunrise() {
 		return sunrise;
 	}
+
 	public Long getSunset() {
 		return sunset;
-	}	
-} 
+	}
+}
