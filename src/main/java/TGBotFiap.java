@@ -196,6 +196,7 @@ public class TGBotFiap extends TelegramLongPollingBot {
 				Map<String, Holiday> feriados = buscaFeriadosPorAno.getMapaDataFeriado();
 				
 				StringBuilder feriadosString = new StringBuilder();
+				feriadosString.append(String.format("* * * * Feriados para  %s * * * *", message.getText())).append("\n");
 				
 				feriados.values().forEach(h -> {
 					feriadosString.append(h.getHolidayFormatado());
@@ -210,7 +211,7 @@ public class TGBotFiap extends TelegramLongPollingBot {
         	else {
         		ci.setState("buscaFeriado");
 
-        		message.setText("Digite uma data(dd/MM/yyyy) ou ano(yyyy) a ser consultado");
+        		message.setText("Digite o ano(yyyy) a ser consultado");
                 enviaMessage(message);        		
         	}
         }

@@ -14,7 +14,7 @@ public class Feriado {
 
 	private List<Holiday> Holiday;
 	private Map<String, Holiday> mapaDataFeriado = new HashMap<String, Holiday>();
-
+	
 	public Feriado() {
 	}
 
