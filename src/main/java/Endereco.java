@@ -1,6 +1,6 @@
 
 /**
- * Classe que auxilia na desserialização de um json ao busar por cep
+ * Classe que auxilia na desserialização de um json ao buscar por cep
  */
 public class Endereco {
 	
@@ -58,15 +58,15 @@ public class Endereco {
 				+ bairro + ", localidade=" + localidade + ", uf=" + uf + ", unidade=" + unidade + ", ibge=" + ibge
 				+ ", gia=" + gia + "]";
 	}
-	
+
 	public String getEnderecoFormatado() {
 		
-		StringBuilder endereco = new StringBuilder();
-		endereco.append("Endereço: ").append(this.getLogradouro());
-		endereco.append("\nBairro: ").append(this.getBairro());
-		endereco.append("\nCidade: ").append(this.getLocalidade());
-		endereco.append("\nEstado: ").append(this.getUf());
+		StringBuilder enderecoFormatado = new StringBuilder();
+		enderecoFormatado.append("Endereço: ").append(this.getLogradouro());
+		enderecoFormatado.append("\nBairro: ").append(this.getBairro());
+		enderecoFormatado.append("\nCidade: ").append(this.getLocalidade());
+		enderecoFormatado.append("\nEstado: ").append(this.getUf());
 		
-		return endereco.toString();
+		return enderecoFormatado.toString();
 	}
 }
