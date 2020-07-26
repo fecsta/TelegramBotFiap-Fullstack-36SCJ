@@ -2,8 +2,6 @@ import java.util.List;
 
 /**
  * Classe que auxilia na desserialização do json para consulta de feriados
- * @author diegosg
- *
  */
 public class Feriado {
 

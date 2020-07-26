@@ -111,11 +111,7 @@ class Weather{
 	}
 	public String getIcon() {
 		return icon;
-	}
-  
- 
-	
-	
+	}	
 }
 
 class MainT{
