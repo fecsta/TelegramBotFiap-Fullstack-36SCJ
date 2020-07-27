@@ -1,5 +1,9 @@
 import java.util.Scanner;
 
+
+/**
+ * Classe que faz o cálculo do IMC a partir dos valores informados 
+ */
 public class IMC {
     float altura;
     float peso;

@@ -1,3 +1,7 @@
+/**
+ * Classe que estabelece como se dará a interação por estados
+ */
+
 public class ChatInteracao {
 
 	private long chatId;
