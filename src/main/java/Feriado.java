@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Classe que auxilia na desserialização do json para consulta de feriados
@@ -14,7 +13,7 @@ public class Feriado {
 
 	private List<Holiday> Holiday;
 	private Map<String, Holiday> mapaDataFeriado = new HashMap<String, Holiday>();
-
+	
 	public Feriado() {
 	}
 
@@ -22,14 +21,17 @@ public class Feriado {
 		return Holiday;
 	}
 
+	public Map<String, Holiday> getMapaDataFeriado() {
+		return mapaDataFeriado;
+	}
+
+	public void setMapaDataFeriado(Map<String, Holiday> mapaDataFeriado) {
+		this.mapaDataFeriado = mapaDataFeriado;
+	}
+
 	@Override
 	public String toString() {
 		return "Feriado [Holiday=" + Holiday + "]";
-	}
-	
-	public Holiday buscaNoMapaPorData(String data) {
-		mapaDataFeriado = this.getHoliday().stream().collect(Collectors.toMap(h -> h.getDateFormatado(), h -> h));
-		return mapaDataFeriado.get(data);
 	}
 }
 
@@ -74,9 +76,9 @@ class Holiday {
 	public String getHolidayFormatado() {
 		
 		StringBuilder holiday = new StringBuilder();
-		holiday.append("Dia: ").append(this.getDateFormatado());
-		holiday.append("Tipo feriado: ").append(this.getType());
-		holiday.append("Nome: ").append(this.getName());
+		holiday.append("Dia: ").append(this.getDateFormatado()).append("\n");
+		holiday.append("Tipo feriado: ").append(this.getType()).append("\n");
+		holiday.append("Nome: ").append(this.getName()).append("\n\n");
 		
 		return holiday.toString();
 	}

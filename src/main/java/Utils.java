@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -93,9 +94,12 @@ public class Utils {
 	 * @param ano
 	 * @return
 	 */
-	public static Feriado buscaFeriadosPorAno(int ano) {
+	public static Feriado buscaFeriadosPorAno(String data) {
+		
+		if(data.length() == 10) 
+			data = data.split("/")[2];
 
-		String urlString = String.format("http://services.sapo.pt/Holiday/GetNationalHolidays?year=%s", ano);
+		String urlString = String.format("http://services.sapo.pt/Holiday/GetNationalHolidays?year=%s", data);
 
 		try {
 
@@ -104,8 +108,15 @@ public class Utils {
 			JSONObject paisesJson = XML.toJSONObject(xmlString);
 			JSONObject getNationalHolidaysResponse = (JSONObject) paisesJson.get("GetNationalHolidaysResponse");
 			Object getNationalHolidaysResult = getNationalHolidaysResponse.get("GetNationalHolidaysResult");
+			
+			Feriado feriado = new GsonBuilder().create().fromJson(getNationalHolidaysResult.toString(), Feriado.class);
+			
+			Map<String, Holiday> feriados = feriado.getHoliday()
+	                .stream()
+	                .collect(Collectors.toMap(holiday -> holiday.getDateFormatado(), holiday -> holiday, (first, second) -> first, LinkedHashMap::new));
+			feriado.setMapaDataFeriado(feriados);
 
-			return new GsonBuilder().create().fromJson(getNationalHolidaysResult.toString(), Feriado.class);
+			return feriado;
 
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -142,7 +153,7 @@ public class Utils {
 
 	public static void main(String[] args) throws IOException {
 
-		Feriado buscaFeriadosPorAno = buscaFeriadosPorAno(2020);
+		Feriado buscaFeriadosPorAno = buscaFeriadosPorAno("2020");
 		
 		Map<String, Holiday> collect = buscaFeriadosPorAno.getHoliday().stream().collect(Collectors.toMap(h -> h.getDateFormatado(), h -> h));
 		

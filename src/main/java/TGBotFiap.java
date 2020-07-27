@@ -1,3 +1,5 @@
+import java.util.Map;
+
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -8,17 +10,18 @@ public class TGBotFiap extends TelegramLongPollingBot {
 
     ChatInteracao ci = new ChatInteracao();
     IMC indice = new IMC();
-    
-    String comandos = "Digite 'cep' para fazer uma busca de endereço por cep\n"
-                    + "Digite 'imc' para calcular o seu IMC\n"
-                    + "Digite 'previsao' para a previsão do tempo\n"
-                    + "Digite 'cpf' para a validação\n"
-                    + "Digite 'feriado' para consultar feriados\n"
-                    + "Digite 'finalizar' a qualquer momento para encerrar o chat atual";
 
     @Override
     public void onUpdateReceived(Update update){
-
+    	
+    	StringBuilder comando = new StringBuilder();	
+    	comando.append("Digite 'cep' para fazer uma busca de endereço por cep\n");
+    	comando.append("Digite 'imc' para calcular o seu IMC\n");
+		comando.append("Digite 'previsao' para a previsão do tempo\n");
+		comando.append("Digite 'cpf' para a validação\n");
+		comando.append("Digite 'feriado' para consultar feriados\n");
+		comando.append("Digite 'finalizar' a qualquer momento para encerrar o chat atual");
+		
         ci.setChatId(update.getMessage().getChatId());
 
         //Pega a mensagem inicial
@@ -33,7 +36,7 @@ public class TGBotFiap extends TelegramLongPollingBot {
             message.setText("Bem vindo ao TelegramBot Fiap - MBA FullStack");
             enviaMessage(message);
 
-            message.setText(comandos);
+            message.setText(comando.toString());
             enviaMessage(message);
 
             //Encerra o chat setando o estado como null
@@ -185,15 +188,57 @@ public class TGBotFiap extends TelegramLongPollingBot {
         	}
         }
         
-        else if(ci.getState().equals("ConsultaFeriado") || message.getText().equalsIgnoreCase("feriado")) {
+        else if(ci.getState().equals("buscaFeriado") || message.getText().equalsIgnoreCase("feriado")) {
         	
-        	if(message.getText().equalsIgnoreCase("feriado")) {
-        		
-        	}
-        	else {
-        		ci.setState("ConsultaFeriado");
+        	if(ci.getState().equals("buscaFeriado")) {
+				
+				StringBuilder feriadosString = new StringBuilder();
+				feriadosString.append(String.format("* * * * Feriado para  %s * * * *", message.getText())).append("\n");
+				
+				if(message.getText().length() == 10) {
 
-        		message.setText("Digite o uma data(dd/MM/yyyy) ou ano(yyyy) a ser consultado");
+					Feriado buscaFeriadosPorAno = Utils.buscaFeriadosPorAno(message.getText());
+					
+					Map<String, Holiday> feriados = buscaFeriadosPorAno.getMapaDataFeriado();
+					
+					Holiday feriado = feriados.get(message.getText());
+					
+					if(feriado == null) {
+	                    message.setText(String.format("Data: %s não é um feriado", message.getText()));
+	                    enviaMessage(message);
+	                    ci.setState("MenuIni");
+	                    return;
+					}
+					
+					feriadosString.append(feriado.getHolidayFormatado());
+				}
+				else if(message.getText().length() == 4) {
+					
+					Feriado buscaFeriadosPorAno = Utils.buscaFeriadosPorAno(message.getText());
+					
+					Map<String, Holiday> feriados = buscaFeriadosPorAno.getMapaDataFeriado();
+					
+					feriados.values().forEach(h -> {
+						feriadosString.append(h.getHolidayFormatado());
+					});
+				}
+				else {
+                    message.setText(String.format("Data ou Ano: (%s) não digitado corretamente", message.getText()));
+                    enviaMessage(message);
+                    message.setText("Digite o ano(yyyy) ou uma data(dd/mm/yyyy) a ser consultado");
+                    enviaMessage(message);
+                    return;
+				}
+				
+				message.setText(feriadosString.toString());
+				enviaMessage(message);
+				ci.setState("MenuIni");
+    		}
+        		
+        	else {
+        		ci.setState("buscaFeriado");
+
+        		message.setText("Digite o ano(yyyy) ou uma data(dd/mm/yyyy) a ser consultado");
                 enviaMessage(message);        		
         	}
         }
@@ -206,7 +251,7 @@ public class TGBotFiap extends TelegramLongPollingBot {
         //Caso tenha saido de uma interação, repete o Menu para o usuário
         if (ci.getState().equals("MenuIni")){
         	ci.setState("Menu");
-        	message.setText(comandos);
+        	message.setText(comando.toString());
             enviaMessage(message);
         }
     }
