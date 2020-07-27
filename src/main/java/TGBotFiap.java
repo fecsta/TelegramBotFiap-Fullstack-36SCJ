@@ -5,6 +5,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+/**
+ * Classe que lida com as interações e "estados" no chat do Telegram
+ */
 
 public class TGBotFiap extends TelegramLongPollingBot {
 
