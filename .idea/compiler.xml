@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="TelegramBotFiap" />
         <module name="TelegramBotFiap-Fullstack-36SCJ-dougbranch" />
+        <module name="TelegramBotFiap-Fullstack-36SCJ" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="11" />
