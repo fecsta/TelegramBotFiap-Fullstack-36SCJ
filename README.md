@@ -6,7 +6,7 @@
  </p>
 
  <p align="center">
-    <img alt="print" src="src/assets/print.gif" height="600px">
+    <img alt="print" src="src/assets/print.gif" height="400px">
  </p>
 
  ## :rocket: Tecnologias
