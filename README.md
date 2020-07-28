@@ -1,11 +1,11 @@
 <h1 align="center">Telegram Bot - Java Platform</h1>
+
  <p align="center">
    <a href="#-tecnologias">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
    <a href="#-projeto">Projeto</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
  </p>
 
  <p align="center">
-    <img alt="print" src="src/assets/print.gif" height="600px">
     <img alt="print" src="src/assets/print.gif" height="400px">
  </p>
 

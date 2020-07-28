@@ -19,7 +19,6 @@ import br.com.caelum.stella.validation.CPFValidator;
 /**
  * Classe utilitaria que fará algumas buscas por APIs
  */
-@SuppressWarnings("ALL")
 public class Utils {
 
 	/**

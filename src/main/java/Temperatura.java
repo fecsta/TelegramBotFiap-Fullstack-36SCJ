@@ -1,5 +1,9 @@
 import java.util.Scanner;
 
+
+/**
+ * Classe que faz o cálculo de temperatura, para analizar o status febril
+ */
 public class Temperatura {
     float febre;
     String error;

@@ -19,7 +19,7 @@ public class TGBotFiap extends TelegramLongPollingBot {
     	
     	StringBuilder comando = new StringBuilder();	
     	comando.append("Digite 'cep' para fazer uma busca de endereço por cep\n");
-    	comando.append("Digite 'imc' para calcular o seu IMC\n");
+        comando.append("Digite 'imc' para calcular o seu IMC\n");
         comando.append("Digite 'febre' para analisar estado febril\n");
 		comando.append("Digite 'previsao' para a previsão do tempo\n");
 		comando.append("Digite 'cpf' para a validação\n");
@@ -137,39 +137,36 @@ public class TGBotFiap extends TelegramLongPollingBot {
             	message.setText("Digite sua altura em metros");
                 enviaMessage(message);
             }
-
-            //Caso tenha digitado 'febre', será feito a solicitação da temperatura medida para analisar as acoes a serem tomadas
+        //Caso tenha digitado 'febre', será feito a solicitação da temperatura medida para analisar as acoes a serem tomadas
         }else if (ci.getState().equals("febre")  || (message.getText().equalsIgnoreCase("febre"))) {
             Temperatura temperatura = new Temperatura();
-            if (ci.getState().equals("febre")) {
-                // Valida se temperatura é numérico
-                try {
-                    String text = message.getText().replace(",", ".");
-                    temperatura.setTemp(Float.parseFloat(text));
-                } catch (NumberFormatException exp) {
-                    message.setText("O valor da temperatura deve ser numérico, tente novamente");
-                    enviaMessage(message);
-                    return;
-                }
-
-                // Valida limite de temperatura
+                if (ci.getState().equals("febre")) {
+                    // Valida se temperatura é numérico
+                    try {
+                        String text = message.getText().replace(",", ".");
+                        temperatura.setTemp(Float.parseFloat(text));
+                    } catch (NumberFormatException exp) {
+                        message.setText("O valor da temperatura deve ser numérico, tente novamente");
+                        enviaMessage(message);
+                        return;
+                    }
+    
+                    // Valida limite de temperatura
                 if (!temperatura.check()) {
                     message.setText(temperatura.error + "\nTente novamente");
-                    enviaMessage(message);
-                }
-                else {
-                    ci.setState("MenuIni");
+                        enviaMessage(message);
+                } else {
+                 ci.setState("MenuIni");
                     message.setText(temperatura.toString());
                     enviaMessage(message);
                 }
-
-            } else {
-                ci.setState("febre");
-                System.out.println();
-                message.setText("Vamos analisar sua temperatura (Adulto entre 18 e 60 anos) \n Digite sua temperatura em graus");
-                enviaMessage(message);
-            }
-
+    
+                } else {
+                    ci.setState("febre");
+                    System.out.println();
+                    message.setText("Vamos analisar sua temperatura (Adulto entre 18 e 60 anos) \n Digite sua temperatura em graus");
+                    enviaMessage(message);
+                }    
             //Caso tenha digitado 'previsão', será feito a solicitação da previsão do tempo e depois setado o estado PrevisaoTempo para realizar a consulta
         }else if (ci.getState().equals("PrevisaoTempo")||(message.getText().equalsIgnoreCase("previsão"))) {
 
